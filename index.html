@@ -3,308 +3,755 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World of Tanks Blitz</title>
+    <title>WoT Blitz — Личный кабинет</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Impact', 'Arial Black', sans-serif;
             background: #0a0a0a;
             color: #fff;
+            padding: 20px;
         }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* ШАПКА */
         .header {
-            background: rgba(10,10,10,0.95);
-            padding: 18px 30px;
+            background: #141414;
+            padding: 20px 30px;
+            border-bottom: 3px solid #c8102e;
+            margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #c8102e;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
         }
+        
         .logo {
-            font-size: 22px;
-            font-weight: 900;
+            font-size: 24px;
+            color: #c8102e;
         }
-        .logo .wot { color: #c8102e; }
-        .logo .blitz { color: #d4b48c; font-family: 'Times New Roman', serif; font-style: italic; }
-        .nav a {
-            color: #b0a090;
-            text-decoration: none;
-            margin: 0 12px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: 'Arial', sans-serif;
+        .logo span { color: #d4b48c; }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
-        .nav a:hover { color: #c8102e; }
-        .hero {
-            background: linear-gradient(180deg, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.9) 100%);
-            padding: 100px 20px 80px;
-            text-align: center;
-            border-bottom: 2px solid #c8102e;
-        }
-        .hero h1 {
-            font-size: 48px;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #fff;
-            text-shadow: 0 0 40px rgba(200,16,46,0.4);
-        }
-        .hero h1 span { color: #c8102e; }
-        .hero .sub {
-            font-size: 18px;
+        
+        .user-menu .email {
             color: #d4b48c;
             font-family: 'Arial', sans-serif;
-            letter-spacing: 3px;
-            margin-top: 10px;
+            font-size: 14px;
         }
-        .hero p {
-            font-size: 16px;
-            color: #b0a090;
-            font-family: 'Arial', sans-serif;
-            margin: 20px 0 30px;
-        }
-        .btn-group { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        
         .btn {
             background: #c8102e;
             color: #fff;
             border: none;
-            padding: 14px 35px;
-            font-size: 16px;
+            padding: 10px 25px;
+            font-size: 14px;
             text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 1px;
-            border-radius: 3px;
             cursor: pointer;
+            border-radius: 3px;
             font-family: 'Arial', sans-serif;
         }
-        .btn:hover { background: #e0183a; transform: scale(1.03); }
+        
+        .btn:hover { background: #e0183a; }
         .btn-outline {
             background: transparent;
             border: 2px solid #c8102e;
             color: #c8102e;
         }
         .btn-outline:hover { background: #c8102e; color: #fff; }
-        .platforms {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
+        
+        /* ФОРМА ВХОДА */
+        .login-box {
+            background: #141414;
+            padding: 40px;
+            max-width: 420px;
+            margin: 50px auto;
+            border: 1px solid #2a2a2a;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .login-box h2 {
+            color: #d4b48c;
+            margin-bottom: 20px;
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+        
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            color: #fff;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+        
+        .login-box input:focus {
+            border-color: #c8102e;
+            outline: none;
+        }
+        
+        .login-box .btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        
+        .error {
+            color: #c8102e;
+            margin-top: 10px;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+        }
+        
+        .success {
+            color: #4caf50;
+            margin-top: 10px;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+        }
+        
+        .register-link {
             color: #6a5a4a;
             font-family: 'Arial', sans-serif;
-            font-size: 11px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            flex-wrap: wrap;
+            font-size: 13px;
+            margin-top: 15px;
         }
-        .platforms span { color: #8a7a6a; }
-        .cards {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            padding: 50px 20px;
-            background: #0f0f0f;
-            flex-wrap: wrap;
-        }
-        .card {
-            background: #161616;
-            border: 1px solid #222;
-            border-radius: 4px;
-            padding: 25px 20px;
-            width: 220px;
-            text-align: center;
-            transition: all 0.3s;
-            position: relative;
-        }
-        .card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 20%;
-            right: 20%;
-            height: 2px;
-            background: #c8102e;
-        }
-        .card:hover { border-color: #c8102e; transform: translateY(-5px); }
-        .card .icon {
-            font-size: 28px;
+        
+        .register-link a {
             color: #c8102e;
-            margin-bottom: 10px;
+            text-decoration: none;
+            cursor: pointer;
         }
-        .card h3 {
-            color: #d4b48c;
-            font-size: 18px;
-            font-weight: normal;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+        
+        .register-link a:hover { text-decoration: underline; }
+        
+        /* КАБИНЕТ */
+        .cabinet {
+            display: none;
         }
-        .card p {
-            color: #7a6a5a;
-            font-family: 'Arial', sans-serif;
-            font-size: 12px;
-            line-height: 1.6;
-        }
-        .news {
-            padding: 40px 20px 60px;
-            background: #0a0a0a;
-        }
-        .news h2 {
-            color: #d4b48c;
-            font-size: 24px;
-            font-weight: normal;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-align: center;
+        
+        .cabinet.active { display: block; }
+        
+        .welcome-box {
+            background: #141414;
+            padding: 30px;
+            border-left: 3px solid #c8102e;
             margin-bottom: 30px;
         }
-        .news-grid {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .news-item {
-            background: #141414;
-            padding: 15px;
-            width: 250px;
-            border: 1px solid #1f1f1f;
-            border-radius: 4px;
-        }
-        .news-item:hover { border-color: #c8102e; }
-        .news-item .date {
-            color: #c8102e;
-            font-family: 'Arial', sans-serif;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .news-item h4 {
+        
+        .welcome-box h2 {
             color: #d4b48c;
-            font-size: 15px;
-            margin: 8px 0;
             font-weight: normal;
         }
-        .news-item p {
+        
+        .welcome-box h2 span { color: #c8102e; }
+        
+        .welcome-box p {
             color: #6a5a4a;
             font-family: 'Arial', sans-serif;
-            font-size: 12px;
+            margin-top: 5px;
         }
-        .footer {
-            background: #080808;
-            padding: 30px 20px;
-            border-top: 2px solid #c8102e;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
+        
+        /* АДМИН-ПАНЕЛЬ */
+        .add-form {
+            background: #141414;
+            padding: 30px;
+            border: 1px solid #2a2a2a;
+            border-radius: 5px;
+            margin-bottom: 30px;
         }
-        .footer-text {
-            color: #4a3a2a;
+        
+        .add-form h3 {
+            color: #d4b48c;
+            margin-bottom: 20px;
+            font-weight: normal;
+            letter-spacing: 1px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #b0a090;
             font-family: 'Arial', sans-serif;
-            font-size: 10px;
+            font-size: 14px;
+            margin-bottom: 5px;
         }
-        .footer-text span { color: #c8102e; }
-        .social a {
-            color: #5a4a3a;
-            text-decoration: none;
-            margin: 0 10px;
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            color: #fff;
+            border-radius: 3px;
             font-family: 'Arial', sans-serif;
-            font-size: 12px;
+            font-size: 14px;
         }
-        .social a:hover { color: #c8102e; }
-        @media (max-width: 600px) {
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #c8102e;
+            outline: none;
+        }
+        
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .upload-area {
+            border: 2px dashed #2a2a2a;
+            padding: 30px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: #c8102e;
+            background: #1a1a1a;
+        }
+        
+        .upload-area p {
+            color: #6a5a4a;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+        }
+        
+        .upload-area input[type="file"] {
+            display: none;
+        }
+        
+        .preview-img {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            border: 1px solid #2a2a2a;
+            border-radius: 3px;
+        }
+        
+        .btn-submit {
+            background: #c8102e;
+            color: #fff;
+            border: none;
+            padding: 12px 40px;
+            font-size: 16px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 3px;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .btn-submit:hover { background: #e0183a; }
+        
+        /* ТОВАРЫ */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .product-card {
+            background: #141414;
+            border: 1px solid #2a2a2a;
+            border-radius: 5px;
+            padding: 15px;
+            position: relative;
+            transition: 0.3s;
+        }
+        
+        .product-card:hover {
+            border-color: #c8102e;
+            transform: translateY(-5px);
+        }
+        
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+        
+        .product-card h4 {
+            color: #d4b48c;
+            font-weight: normal;
+            font-size: 18px;
+        }
+        
+        .product-card .price {
+            color: #c8102e;
+            font-size: 20px;
+            margin: 5px 0;
+        }
+        
+        .product-card .desc {
+            color: #6a5a4a;
+            font-family: 'Arial', sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .product-card .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #c8102e;
+            color: #fff;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .product-card .delete-btn:hover {
+            background: #ff1a3a;
+        }
+        
+        .empty-message {
+            color: #6a5a4a;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        /* АКЦИЯ */
+        .promo-banner {
+            background: linear-gradient(135deg, #c8102e, #8a0a1e);
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .promo-banner h3 {
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
+        
+        .promo-banner p {
+            font-family: 'Arial', sans-serif;
+            margin-top: 5px;
+        }
+        
+        .promo-banner .btn {
+            margin-top: 10px;
+            background: #fff;
+            color: #c8102e;
+        }
+        
+        .promo-banner .btn:hover { background: #f0f0f0; }
+        
+        @media (max-width: 768px) {
             .header { flex-direction: column; text-align: center; }
-            .nav a { margin: 0 8px; font-size: 11px; }
-            .hero h1 { font-size: 32px; }
-            .card { width: 100%; max-width: 300px; }
-            .news-item { width: 100%; max-width: 300px; }
-            .footer { flex-direction: column; text-align: center; }
+            .user-menu { justify-content: center; }
+            .products-grid { grid-template-columns: 1fr; }
+            .add-form { padding: 15px; }
         }
     </style>
 </head>
 <body>
-    <header class="header">
+
+<div class="container" id="app">
+    <!-- ШАПКА -->
+    <div class="header">
         <div class="logo">
-            <span class="wot">WORLD OF TANKS</span>
-            <span class="blitz">BLITZ</span>
+            <span>World of Tanks</span> <span>BLITZ</span>
         </div>
-        <nav class="nav">
-            <a href="#">Игра</a>
-            <a href="#">Новости</a>
-            <a href="#">Техника</a>
-            <a href="#">Магазин</a>
-            <a href="#">Киберспорт</a>
-        </nav>
-    </header>
-    <section class="hero">
-        <h1>СТАНЬ <span>ЛЕГЕНДОЙ</span></h1>
-        <div class="sub">БИТВЫ 7 НА 7</div>
-        <p>Выбери свой танк и сразись с лучшими игроками мира</p>
-        <div class="btn-group">
-            <button class="btn">Играть бесплатно</button>
-            <button class="btn btn-outline">Трейлер</button>
+        <div class="user-menu" id="userMenu">
+            <span class="email" id="userEmail"></span>
+            <button class="btn" id="loginBtn" onclick="showLogin()">Войти</button>
+            <button class="btn btn-outline" id="logoutBtn" onclick="logout()" style="display:none;">Выйти</button>
         </div>
-        <div class="platforms">
-            <span>Steam</span> <span>•</span>
-            <span>App Store</span> <span>•</span>
-            <span>Google Play</span> <span>•</span>
-            <span>Microsoft</span>
+    </div>
+
+    <!-- ФОРМА ВХОДА -->
+    <div id="loginBox" class="login-box">
+        <h2>🔐 Вход в аккаунт</h2>
+        <input type="email" id="loginEmail" placeholder="Email" value="i87989488@gmail.com">
+        <input type="password" id="loginPassword" placeholder="Пароль" value="1234" onkeydown="if(event.key==='Enter') login()">
+        <button class="btn" onclick="login()">Войти</button>
+        <div id="loginMessage"></div>
+        <div class="register-link">
+            Нет аккаунта? <a onclick="showRegister()">Зарегистрироваться</a>
         </div>
-    </section>
-    <section class="cards">
-        <div class="card">
-            <div class="icon">⚔</div>
-            <h3>Тактика</h3>
-            <p>Динамичные бои 7x7 на уникальных аренах Второй мировой.</p>
+    </div>
+
+    <!-- ФОРМА РЕГИСТРАЦИИ -->
+    <div id="registerBox" class="login-box" style="display:none;">
+        <h2>📝 Регистрация</h2>
+        <input type="email" id="regEmail" placeholder="Email" value="i87989488@gmail.com">
+        <input type="password" id="regPassword" placeholder="Пароль (мин. 4 символа)" value="1234">
+        <input type="password" id="regPassword2" placeholder="Повторите пароль" value="1234">
+        <button class="btn" onclick="register()">Зарегистрироваться</button>
+        <div id="regMessage"></div>
+        <div class="register-link">
+            Уже есть аккаунт? <a onclick="showLogin()">Войти</a>
         </div>
-        <div class="card">
-            <div class="icon">⚙</div>
-            <h3>Техника</h3>
-            <p>Более 450 танков от лёгких до тяжёлых. Каждый уникален.</p>
+    </div>
+
+    <!-- КАБИНЕТ -->
+    <div id="cabinet" class="cabinet">
+        <div class="welcome-box">
+            <h2>👋 Привет, <span id="userName">Игрок</span>!</h2>
+            <p>Добро пожаловать в админ-панель World of Tanks Blitz</p>
         </div>
-        <div class="card">
-            <div class="icon">🛡</div>
-            <h3>Кастомизация</h3>
-            <p>Тысячи камуфляжей, эмблем и стилей для твоего танка.</p>
+
+        <!-- АКЦИЯ -->
+        <div class="promo-banner" id="promoBanner">
+            <h3>🔥 АКЦИЯ!</h3>
+            <p id="promoText">Скидка 50% на все премиум-танки до конца недели!</p>
+            <button class="btn" onclick="editPromo()">✏️ Редактировать акцию</button>
         </div>
-        <div class="card">
-            <div class="icon">🏅</div>
-            <h3>Киберспорт</h3>
-            <p>Турниры с призовым фондом и звание чемпиона мира.</p>
+
+        <!-- ДОБАВЛЕНИЕ ТОВАРА -->
+        <div class="add-form">
+            <h3>➕ Добавить товар в магазин</h3>
+            <form id="productForm" onsubmit="addProduct(event)">
+                <div class="form-group">
+                    <label>Название товара</label>
+                    <input type="text" id="productName" placeholder="Например: Тяжёлый танк IS-7" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Цена (₽)</label>
+                    <input type="number" id="productPrice" placeholder="Например: 2990" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Описание</label>
+                    <textarea id="productDesc" placeholder="Краткое описание товара..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Загрузить фото</label>
+                    <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+                        <p>📸 Нажми, чтобы выбрать фото</p>
+                        <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
+                        <img id="imagePreview" class="preview-img" style="display:none;">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-submit">Добавить товар</button>
+            </form>
         </div>
-    </section>
-    <section class="news">
-        <h2>Новости</h2>
-        <div class="news-grid">
-            <div class="news-item">
-                <div class="date">02 Августа 2026</div>
-                <h4>Обновление 10.5</h4>
-                <p>Японские тяжёлые танки и карта «Камчатка» уже в игре!</p>
+
+        <!-- СПИСОК ТОВАРОВ -->
+        <h3 style="color:#d4b48c;font-weight:normal;letter-spacing:2px;margin:30px 0 20px;">
+            📦 Товары в магазине (<span id="productCount">0</span>)
+        </h3>
+        <div id="productsList" class="products-grid">
+            <div class="empty-message">Пока нет товаров. Добавь первый!</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ====================== ДАННЫЕ ======================
+    let products = [];
+    let currentUser = null;
+    
+    // ЗАГРУЗКА ДАННЫХ
+    function loadData() {
+        // Загружаем пользователя
+        const savedUser = localStorage.getItem('wot_user');
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+            updateUI();
+        }
+        
+        // Загружаем товары
+        const savedProducts = localStorage.getItem('wot_products');
+        if (savedProducts) products = JSON.parse(savedProducts);
+        else products = [];
+        
+        // Загружаем акцию
+        const promo = localStorage.getItem('wot_promo');
+        if (promo) document.getElementById('promoText').textContent = promo;
+        
+        renderProducts();
+    }
+    
+    function saveData() {
+        localStorage.setItem('wot_products', JSON.stringify(products));
+        if (currentUser) {
+            localStorage.setItem('wot_user', JSON.stringify(currentUser));
+        }
+    }
+    
+    // ====================== РЕГИСТРАЦИЯ ======================
+    function showRegister() {
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('registerBox').style.display = 'block';
+        document.getElementById('loginMessage').textContent = '';
+        document.getElementById('regMessage').textContent = '';
+    }
+    
+    function showLogin() {
+        document.getElementById('loginBox').style.display = 'block';
+        document.getElementById('registerBox').style.display = 'none';
+        document.getElementById('loginMessage').textContent = '';
+        document.getElementById('regMessage').textContent = '';
+    }
+    
+    function register() {
+        const email = document.getElementById('regEmail').value.trim();
+        const pass = document.getElementById('regPassword').value;
+        const pass2 = document.getElementById('regPassword2').value;
+        const msg = document.getElementById('regMessage');
+        
+        if (!email || !pass) {
+            msg.textContent = '❌ Заполните все поля!';
+            msg.className = 'error';
+            return;
+        }
+        
+        if (pass.length < 4) {
+            msg.textContent = '❌ Пароль должен быть минимум 4 символа!';
+            msg.className = 'error';
+            return;
+        }
+        
+        if (pass !== pass2) {
+            msg.textContent = '❌ Пароли не совпадают!';
+            msg.className = 'error';
+            return;
+        }
+        
+        // Проверяем, есть ли уже такой пользователь
+        const users = JSON.parse(localStorage.getItem('wot_users') || '[]');
+        if (users.find(u => u.email === email)) {
+            msg.textContent = '❌ Пользователь с таким email уже существует!';
+            msg.className = 'error';
+            return;
+        }
+        
+        // Сохраняем пользователя
+        users.push({ email: email, password: pass });
+        localStorage.setItem('wot_users', JSON.stringify(users));
+        
+        msg.textContent = '✅ Регистрация успешна! Войдите в аккаунт.';
+        msg.className = 'success';
+        
+        setTimeout(() => {
+            document.getElementById('loginEmail').value = email;
+            document.getElementById('loginPassword').value = pass;
+            showLogin();
+        }, 1000);
+    }
+    
+    // ====================== ВХОД ======================
+    function login() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const pass = document.getElementById('loginPassword').value;
+        const msg = document.getElementById('loginMessage');
+        
+        if (!email || !pass) {
+            msg.textContent = '❌ Введите email и пароль!';
+            msg.className = 'error';
+            return;
+        }
+        
+        // Проверяем в списке пользователей
+        const users = JSON.parse(localStorage.getItem('wot_users') || '[]');
+        const user = users.find(u => u.email === email && u.password === pass);
+        
+        if (!user) {
+            msg.textContent = '❌ Неверный email или пароль!';
+            msg.className = 'error';
+            return;
+        }
+        
+        // Вход успешен
+        currentUser = { email: email };
+        localStorage.setItem('wot_user', JSON.stringify(currentUser));
+        
+        msg.textContent = '✅ Вход выполнен!';
+        msg.className = 'success';
+        
+        setTimeout(() => {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('registerBox').style.display = 'none';
+            updateUI();
+        }, 500);
+    }
+    
+    // ====================== ВЫХОД ======================
+    function logout() {
+        currentUser = null;
+        localStorage.removeItem('wot_user');
+        updateUI();
+        document.getElementById('loginBox').style.display = 'block';
+        document.getElementById('cabinet').classList.remove('active');
+        document.getElementById('loginMessage').textContent = '';
+    }
+    
+    // ====================== ОБНОВЛЕНИЕ UI ======================
+    function updateUI() {
+        const cabinet = document.getElementById('cabinet');
+        const loginBox = document.getElementById('loginBox');
+        const registerBox = document.getElementById('registerBox');
+        const userEmail = document.getElementById('userEmail');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        if (currentUser) {
+            cabinet.classList.add('active');
+            loginBox.style.display = 'none';
+            registerBox.style.display = 'none';
+            userEmail.textContent = '👤 ' + currentUser.email;
+            document.getElementById('userName').textContent = currentUser.email.split('@')[0];
+            loginBtn.style.display = 'none';
+            logoutBtn.style.display = 'inline-block';
+            loadData();
+        } else {
+            cabinet.classList.remove('active');
+            loginBox.style.display = 'block';
+            registerBox.style.display = 'none';
+            userEmail.textContent = '';
+            loginBtn.style.display = 'inline-block';
+            logoutBtn.style.display = 'none';
+        }
+    }
+    
+    // ====================== ЗАГРУЗКА ФОТО ======================
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('imagePreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    
+    // ====================== ДОБАВЛЕНИЕ ТОВАРА ======================
+    function addProduct(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('productName').value;
+        const price = document.getElementById('productPrice').value;
+        const desc = document.getElementById('productDesc').value || 'Без описания';
+        const imgInput = document.getElementById('imageInput');
+        
+        let image = '';
+        if (imgInput.files && imgInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                image = e.target.result;
+                saveProduct(name, price, desc, image);
+            };
+            reader.readAsDataURL(imgInput.files[0]);
+        } else {
+            image = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="%232a2a2a" width="200" height="200"/><text x="50" y="110" fill="%236a5a4a" font-family="Arial" font-size="20">Нет фото</text></svg>';
+            saveProduct(name, price, desc, image);
+        }
+    }
+    
+    function saveProduct(name, price, desc, image) {
+        const product = {
+            id: Date.now(),
+            name: name,
+            price: price,
+            desc: desc,
+            image: image,
+            owner: currentUser ? currentUser.email : 'guest'
+        };
+        products.push(product);
+        saveData();
+        renderProducts();
+        document.getElementById('productForm').reset();
+        document.getElementById('imagePreview').style.display = 'none';
+        alert('✅ Товар добавлен!');
+    }
+    
+    // ====================== ОТОБРАЖЕНИЕ ТОВАРОВ ======================
+    function renderProducts() {
+        const list = document.getElementById('productsList');
+        const count = document.getElementById('productCount');
+        count.textContent = products.length;
+        
+        if (products.length === 0) {
+            list.innerHTML = '<div class="empty-message">📭 Пока нет товаров. Добавь первый!</div>';
+            return;
+        }
+        
+        list.innerHTML = products.map(p => `
+            <div class="product-card">
+                <button class="delete-btn" onclick="deleteProduct(${p.id})">✕</button>
+                <img src="${p.image}" alt="${p.name}">
+                <h4>${p.name}</h4>
+                <div class="price">${p.price} ₽</div>
+                <div class="desc">${p.desc}</div>
+                <div style="color:#4a3a2a;font-family:Arial;font-size:10px;margin-top:10px;">
+                    📌 ${p.owner}
+                </div>
             </div>
-            <div class="news-item">
-                <div class="date">28 Июля 2026</div>
-                <h4>Чемпионат мира</h4>
-                <p>Старт квалификаций. Призовой фонд — $500 000.</p>
-            </div>
-            <div class="news-item">
-                <div class="date">20 Июля 2026</div>
-                <h4>Исторические танки</h4>
-                <p>Легендарные машины войны в премиум-магазине.</p>
-            </div>
-        </div>
-    </section>
-    <footer class="footer">
-        <div class="footer-text">
-            © 2026 <span>Wargaming.net</span> · World of Tanks Blitz<br>12+
-        </div>
-        <div class="social">
-            <a href="#">YouTube</a>
-            <a href="#">Twitter</a>
-            <a href="#">Discord</a>
-            <a href="#">Twitch</a>
-        </div>
-    </footer>
+        `).join('');
+    }
+    
+    // ====================== УДАЛЕНИЕ ======================
+    function deleteProduct(id) {
+        if (confirm('Удалить этот товар?')) {
+            products = products.filter(p => p.id !== id);
+            saveData();
+            renderProducts();
+        }
+    }
+    
+    // ====================== РЕДАКТИРОВАНИЕ АКЦИИ ======================
+    function editPromo() {
+        const newText = prompt('Введите текст акции:', document.getElementById('promoText').textContent);
+        if (newText !== null && newText.trim() !== '') {
+            document.getElementById('promoText').textContent = newText;
+            localStorage.setItem('wot_promo', newText);
+        }
+    }
+    
+    // ====================== СОЗДАНИЕ АККАУНТА ======================
+    function createDefaultAccount() {
+        const users = JSON.parse(localStorage.getItem('wot_users') || '[]');
+        if (!users.find(u => u.email === 'i87989488@gmail.com')) {
+            users.push({
+                email: 'i87989488@gmail.com',
+                password: '1234'
+            });
+            localStorage.setItem('wot_users', JSON.stringify(users));
+            console.log('✅ Аккаунт создан: i87989488@gmail.com / 1234');
+        }
+    }
+    
+    // ====================== ИНИЦИАЛИЗАЦИЯ ======================
+    createDefaultAccount();
+    loadData();
+    updateUI();
+</script>
+
 </body>
-</html>
+</html>0
