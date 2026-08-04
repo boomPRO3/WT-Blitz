@@ -52,6 +52,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: 0.3s;
+            cursor: pointer;
         }
         .nav a:hover { color: #c8102e; }
         
@@ -282,14 +283,17 @@
             margin-bottom: 10px;
         }
         
-        /* ФОРМА ДОБАВЛЕНИЯ (только для админа) */
+        /* ФОРМА ДОБАВЛЕНИЯ */
         .add-form {
             background: #141414;
             padding: 25px;
             border: 1px solid #2a2a2a;
             border-radius: 5px;
             margin-bottom: 30px;
+            display: none;
         }
+        
+        .add-form.visible { display: block; }
         
         .add-form h3 {
             color: #d4b48c;
@@ -400,6 +404,16 @@
         }
         .footer span { color: #c8102e; }
         
+        .admin-badge {
+            background: #c8102e;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-family: 'Arial', sans-serif;
+            text-transform: uppercase;
+        }
+        
         @media (max-width: 768px) {
             .header { flex-direction: column; text-align: center; }
             .nav { justify-content: center; }
@@ -420,12 +434,13 @@
         </div>
         
         <nav class="nav">
-            <a href="#" onclick="showPage('store')">Магазин</a>
-            <a href="#" onclick="showPage('news')">Новости</a>
-            <a href="#" onclick="showPage('about')">О игре</a>
+            <a onclick="showPage('store')">Магазин</a>
+            <a onclick="showPage('news')">Новости</a>
+            <a onclick="showPage('about')">О игре</a>
             
             <div class="user-section">
                 <span class="user-email" id="userEmail"></span>
+                <span id="adminBadge" style="display:none;" class="admin-badge">Админ</span>
                 <button class="btn btn-small" id="loginBtn" onclick="openModal()">Войти</button>
                 <button class="btn btn-small btn-outline" id="logoutBtn" onclick="logout()" style="display:none;">Выйти</button>
             </div>
@@ -438,9 +453,9 @@
             <span class="modal-close" onclick="closeModal()">×</span>
             <h2 id="modalTitle">🔐 Вход</h2>
             
-            <input type="email" id="loginEmail" placeholder="Email" value="i87989488@gmail.com">
-            <input type="password" id="loginPassword" placeholder="Пароль" value="1234">
-            <button class="btn" onclick="login()">Войти</button>
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPassword" placeholder="Пароль (мин. 4 символа)">
+            <button class="btn" id="loginActionBtn" onclick="login()">Войти</button>
             <div class="msg" id="loginMsg"></div>
             
             <div class="switch-form">
@@ -466,8 +481,8 @@
             </div>
         </div>
 
-        <!-- ФОРМА ДОБАВЛЕНИЯ (только админ) -->
-        <div class="add-form" id="addForm" style="display:none;">
+        <!-- ФОРМА ДОБАВЛЕНИЯ -->
+        <div class="add-form" id="addForm">
             <h3>➕ Добавить товар</h3>
             <form onsubmit="addProduct(event)">
                 <div class="form-group">
@@ -551,27 +566,35 @@
     // ====================== ДАННЫЕ ======================
     let products = [];
     let currentUser = null;
-    const ADMIN_EMAIL = 'i87989488@gmail.com';
-    const ADMIN_PASS = '1234';
+    let users = [];
+    let isRegisterMode = false;
     
     // ====================== ЗАГРУЗКА ======================
     function loadData() {
+        // Загружаем пользователей
+        const savedUsers = localStorage.getItem('wot_users');
+        users = savedUsers ? JSON.parse(savedUsers) : [];
+        
+        // Загружаем товары
         const savedProducts = localStorage.getItem('wot_products');
         products = savedProducts ? JSON.parse(savedProducts) : [];
         
+        // Загружаем текущего пользователя
         const savedUser = localStorage.getItem('wot_user');
         if (savedUser) {
             currentUser = JSON.parse(savedUser);
-            updateUI();
         }
         
+        // Загружаем акцию
         const promo = localStorage.getItem('wot_promo');
         if (promo) document.getElementById('promoText').textContent = promo;
         
+        updateUI();
         renderProducts();
     }
     
     function saveData() {
+        localStorage.setItem('wot_users', JSON.stringify(users));
         localStorage.setItem('wot_products', JSON.stringify(products));
         if (currentUser) {
             localStorage.setItem('wot_user', JSON.stringify(currentUser));
@@ -586,24 +609,56 @@
         const loginBtn = document.getElementById('loginBtn');
         const logoutBtn = document.getElementById('logoutBtn');
         const adminControls = document.getElementById('adminControls');
+        const adminBadge = document.getElementById('adminBadge');
+        const addForm = document.getElementById('addForm');
         
         if (currentUser) {
             userEmail.textContent = '👤 ' + currentUser.email;
             loginBtn.style.display = 'none';
             logoutBtn.style.display = 'inline-block';
             
-            // Показываем админ-панель только для админа
-            if (currentUser.email === ADMIN_EMAIL) {
-                adminControls.style.display = 'block';
+            // Проверяем, админ ли это (первый зарегистрированный)
+            const isAdmin = users.length > 0 && users[0].email === currentUser.email;
+            
+            if (isAdmin) {
+                adminBadge.style.display = 'inline-block';
+                // Показываем кнопки управления только на странице магазина
+                const storePage = document.getElementById('page-store');
+                if (storePage.classList.contains('active')) {
+                    adminControls.style.display = 'block';
+                } else {
+                    adminControls.style.display = 'none';
+                }
             } else {
+                adminBadge.style.display = 'none';
                 adminControls.style.display = 'none';
+            }
+            
+            // Скрываем форму добавления при переключении страниц
+            if (!document.getElementById('page-store').classList.contains('active')) {
+                addForm.classList.remove('visible');
             }
         } else {
             userEmail.textContent = '';
             loginBtn.style.display = 'inline-block';
             logoutBtn.style.display = 'none';
+            adminBadge.style.display = 'none';
             adminControls.style.display = 'none';
-            document.getElementById('addForm').style.display = 'none';
+            addForm.classList.remove('visible');
+        }
+    }
+    
+    // ====================== СТРАНИЦЫ ======================
+    function showPage(page) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-' + page).classList.add('active');
+        
+        // Обновляем кнопки админа в зависимости от страницы
+        if (page === 'store') {
+            updateUI();
+        } else {
+            document.getElementById('adminControls').style.display = 'none';
+            document.getElementById('addForm').classList.remove('visible');
         }
     }
     
@@ -612,62 +667,31 @@
         document.getElementById('loginModal').classList.add('active');
         document.getElementById('loginMsg').textContent = '';
         document.getElementById('loginMsg').className = 'msg';
+        
+        // Если режим регистрации, переключаем на вход
+        if (isRegisterMode) {
+            switchForm();
+        }
     }
     
     function closeModal() {
         document.getElementById('loginModal').classList.remove('active');
     }
     
-    // Закрытие по клику вне окна
     document.getElementById('loginModal').addEventListener('click', function(e) {
         if (e.target === this) closeModal();
     });
     
-    // ====================== ВХОД ======================
-    function login() {
-        const email = document.getElementById('loginEmail').value.trim();
-        const pass = document.getElementById('loginPassword').value;
-        const msg = document.getElementById('loginMsg');
-        
-        if (!email || !pass) {
-            msg.textContent = '❌ Введите email и пароль!';
-            msg.className = 'msg error';
-            return;
-        }
-        
-        // Проверяем в списке пользователей
-        const users = JSON.parse(localStorage.getItem('wot_users') || '[]');
-        const user = users.find(u => u.email === email && u.password === pass);
-        
-        if (!user) {
-            msg.textContent = '❌ Неверный email или пароль!';
-            msg.className = 'msg error';
-            return;
-        }
-        
-        currentUser = { email: email };
-        saveData();
-        updateUI();
-        closeModal();
-        renderProducts();
-        
-        msg.textContent = '✅ Вход выполнен!';
-        msg.className = 'msg success';
-        setTimeout(() => { msg.textContent = ''; }, 2000);
-    }
-    
-    // ====================== РЕГИСТРАЦИЯ ======================
-    let isRegisterMode = false;
-    
+    // ====================== ВХОД / РЕГИСТРАЦИЯ ======================
     function switchForm() {
         isRegisterMode = !isRegisterMode;
         const title = document.getElementById('modalTitle');
-        const emailInput = document.getElementById('loginEmail');
-        const passInput = document.getElementById('loginPassword');
-        const loginBtn = document.querySelector('.modal-content .btn');
+        const loginBtn = document.getElementById('loginActionBtn');
         const switchText = document.getElementById('switchText');
         const switchLink = document.getElementById('switchLink');
         const msg = document.getElementById('loginMsg');
+        const emailInput = document.getElementById('loginEmail');
+        const passInput = document.getElementById('loginPassword');
         
         if (isRegisterMode) {
             title.textContent = '📝 Регистрация';
@@ -688,6 +712,36 @@
         }
     }
     
+    function login() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const pass = document.getElementById('loginPassword').value;
+        const msg = document.getElementById('loginMsg');
+        
+        if (!email || !pass) {
+            msg.textContent = '❌ Введите email и пароль!';
+            msg.className = 'msg error';
+            return;
+        }
+        
+        const user = users.find(u => u.email === email && u.password === pass);
+        
+        if (!user) {
+            msg.textContent = '❌ Неверный email или пароль!';
+            msg.className = 'msg error';
+            return;
+        }
+        
+        currentUser = { email: email };
+        saveData();
+        updateUI();
+        closeModal();
+        renderProducts();
+        
+        msg.textContent = '✅ Вход выполнен!';
+        msg.className = 'msg success';
+        setTimeout(() => { msg.textContent = ''; }, 2000);
+    }
+    
     function register() {
         const email = document.getElementById('loginEmail').value.trim();
         const pass = document.getElementById('loginPassword').value;
@@ -705,7 +759,6 @@
             return;
         }
         
-        const users = JSON.parse(localStorage.getItem('wot_users') || '[]');
         if (users.find(u => u.email === email)) {
             msg.textContent = '❌ Пользователь уже существует!';
             msg.className = 'msg error';
@@ -713,9 +766,9 @@
         }
         
         users.push({ email: email, password: pass });
-        localStorage.setItem('wot_users', JSON.stringify(users));
+        saveData();
         
-        msg.textContent = '✅ Регистрация успешна! Войдите.';
+        msg.textContent = '✅ Регистрация успешна! Теперь войдите.';
         msg.className = 'msg success';
         
         setTimeout(() => {
@@ -732,19 +785,14 @@
         saveData();
         updateUI();
         renderProducts();
-        document.getElementById('addForm').style.display = 'none';
-    }
-    
-    // ====================== СТРАНИЦЫ ======================
-    function showPage(page) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('page-' + page).classList.add('active');
+        document.getElementById('addForm').classList.remove('visible');
+        document.getElementById('adminControls').style.display = 'none';
     }
     
     // ====================== ТОВАРЫ ======================
     function renderProducts() {
         const list = document.getElementById('productsList');
-        const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
+        const isAdmin = currentUser && users.length > 0 && users[0].email === currentUser.email;
         
         if (products.length === 0) {
             if (isAdmin) {
@@ -753,7 +801,6 @@
                         <div class="big-icon">📦</div>
                         <h3>Товаров пока нет</h3>
                         <p style="color:#6a5a4a;font-family:Arial;">Нажмите «Добавить товар», чтобы создать первый</p>
-                        <button class="btn" onclick="toggleAddForm()" style="margin-top:15px;">➕ Добавить товар</button>
                     </div>
                 `;
             } else {
@@ -781,7 +828,7 @@
     
     function toggleAddForm() {
         const form = document.getElementById('addForm');
-        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        form.classList.toggle('visible');
     }
     
     function previewImage(event) {
@@ -828,6 +875,7 @@
         renderProducts();
         document.getElementById('productForm').reset();
         document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('addForm').classList.remove('visible');
         alert('✅ Товар добавлен!');
     }
     
@@ -848,20 +896,9 @@
         }
     }
     
-    // ====================== СОЗДАНИЕ АККАУНТА ======================
-    function createDefaultAccount() {
-        const users = JSON.parse(localStorage.getItem('wot_users') || '[]');
-        if (!users.find(u => u.email === ADMIN_EMAIL)) {
-            users.push({ email: ADMIN_EMAIL, password: ADMIN_PASS });
-            localStorage.setItem('wot_users', JSON.stringify(users));
-        }
-    }
-    
     // ====================== ИНИЦИАЛИЗАЦИЯ ======================
-    createDefaultAccount();
     loadData();
-    updateUI();
 </script>
 
 </body>
-                </html>
+                        </html>
