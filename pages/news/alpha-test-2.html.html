@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Альфа тест номер 2 | Blitz</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700|Roboto:400,700&subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wh1to/blitz-web@main/css/app.b9n9g9c.css">
+</head>
+<body class="page">
+    <div class="page_body" id="app">
+        <main class="news-page">
+            <div>
+                <div class="news-page_item">
+                    <article class="news">
+                        <div class="news_body">
+                            <!-- Хлебные крошки -->
+                            <div class="bread-crumbs">
+                                <a href="#" class="bread-crumbs_link"><span>Главная</span></a>
+                                <a href="#" class="bread-crumbs_link"><span>Лента</span></a>
+                                <a href="#" class="bread-crumbs_link">Альфа тест номер 2</a>
+                            </div>
+
+                            <!-- Заголовок -->
+                            <h1 class="news_heading">Альфа тест номер 2</h1>
+
+                            <!-- Дата -->
+                            <p class="news_time">
+                                <span>24 Августа 2026</span>
+                            </p>
+
+                            <!-- Баннер -->
+                            <div class="news_banner">
+                                <img src="images/4005838874.jpg" alt="Альфа тест номер 2" style="width: 100%; max-width: 800px; border-radius: 8px;">
+                            </div>
+
+                            <!-- Контент -->
+                            <div class="news_content">
+                                <div>
+                                    <div>
+                                        <blockquote class="message-block">
+                                            🚀 Новые контейнеры, новые танки, новые функции и обновлённый интерфейс!
+                                        </blockquote>
+
+                                        <p><strong>Альфа тест номер 2</strong> — это следующий шаг к совершенству! Мы подготовили для тебя множество новинок:</p>
+
+                                        <ul>
+                                            <li><strong>Новые контейнеры</strong> — эксклюзивные награды ждут тебя внутри!</li>
+                                            <li><strong>Новые танки</strong> — мощная техника, которая изменит правила игры!</li>
+                                            <li><strong>Новые функции</strong> — улучшенная механика боя и дополнительные возможности!</li>
+                                            <li><strong>Обновлённый интерфейс</strong> — более удобный и интуитивно понятный дизайн!</li>
+                                        </ul>
+
+                                        <p>Не пропусти возможность стать частью истории! Участвуй в тестировании и получи уникальные награды!</p>
+
+                                        <!-- Таймер -->
+                                        <div style="margin-top: 30px; padding: 20px; background: rgba(242, 148, 43, 0.1); border-radius: 8px; text-align: center;">
+                                            <span style="font-size: 18px; font-weight: 700; color: #ced6d5;">⏳ До начала теста осталось:</span>
+                                            <div style="margin-top: 10px;">
+                                                <span class="timer-container" data-timer-end="2026-08-27T18:00:00">
+                                                    <span class="timer-days">0</span> д
+                                                    <span class="timer-hours">0</span> ч
+                                                    <span class="timer-minutes">0</span> мин
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-top: 20px;">
+                                            <a href="https://t.me/WTBLITZMobile" target="_blank" class="button-cta" style="display: inline-block; text-decoration: none; font-size: 14px; padding: 12px 32px; border-radius: 4px; background-color: #e1630e; color: #fff; font-weight: 500; letter-spacing: 1.4px; text-transform: uppercase;">
+                                                🎮 Участвовать в тесте
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== СКРИПТ ТАЙМЕРА ===== -->
+    <script>
+        (function() {
+            function updateTimer(container, endTime) {
+                var now = new Date().getTime();
+                var timeRemaining = endTime - now;
+
+                if (timeRemaining > 0) {
+                    var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                    container.innerHTML = '<span class="timer-days">' + days + '</span> д <span class="timer-hours">' + hours + '</span> ч <span class="timer-minutes">' + minutes + '</span> мин';
+                } else {
+                    container.innerHTML = 'Тест уже начался!';
+                    container.style.color = '#33e284';
+                }
+            }
+
+            var containers = document.querySelectorAll('.timer-container[data-timer-end]');
+            containers.forEach(function(container) {
+                var endTime = new Date(container.getAttribute('data-timer-end')).getTime();
+                updateTimer(container, endTime);
+                setInterval(function() {
+                    updateTimer(container, endTime);
+                }, 60000);
+            });
+        })();
+    </script>
+</body>
+</html>
