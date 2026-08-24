@@ -947,21 +947,13 @@
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>') !important;
         }
 
-        /* ===== ФУТЕР (БЕЗ YOUTUBE И DISCORD) ===== */
+        /* ===== ФУТЕР ===== */
         .footer {
             padding-bottom: 30px;
         }
         .social {
             background-color: #1d232a;
             display: none;
-        }
-        .social_content {
-            max-width: 1290px;
-            margin: 0 auto;
-            box-sizing: border-box;
-            padding: 24px 28px;
-            display: flex;
-            flex-wrap: wrap;
         }
         .footer-menu {
             background-color: rgba(11, 18, 24, 0.95);
@@ -1171,7 +1163,6 @@
                         <li class="navigation_item"><a href="#" class="navigation_link"><span>Главная</span></a></li>
                         <li class="navigation_item"><a href="pages/forbidden_ru.html" class="navigation_link"><span>Лента</span></a></li>
                         <li class="navigation_item"><a href="pages/forbidden_ru.html" class="navigation_link"><span>Турниры</span></a></li>
-                        <!-- "Помоги нам!" скрыт -->
                         <li class="navigation_item navigation_item__help"><a href="pages/news/archive_content.html" target="_blank" class="navigation_link"><span>Помоги нам!</span></a></li>
                         <li class="navigation_item"><a class="button-play navigation_button-play"><span>ИГРАТЬ</span></a></li>
                         <li class="navigation_item" id="mobileAuthButtons"></li>
@@ -1202,10 +1193,7 @@
                     </main>
 
                     <footer class="footer">
-                        <!-- SOCIAL БЛОК СКРЫТ (YouTube и Discord убраны) -->
-                        <div class="social" style="display:none;">
-                            <div class="social_content"></div>
-                        </div>
+                        <div class="social" style="display:none;"></div>
                         <div class="footer-menu">
                             <div class="footer-menu_content">
                                 <div class="footer-menu_part">
@@ -1281,6 +1269,10 @@
 
                 <!-- ===== СКРИПТЫ ===== -->
                 <script>
+                    // ============================================================
+                    // WT BLITZ - 2 НОВОСТИ + ТАЙМЕР + АВТОРИЗАЦИЯ + БУРГЕР-МЕНЮ
+                    // ============================================================
+
                     (function() {
                         // ---- НАСТРОЙКИ НОВОСТЕЙ ----
                         var newsConfig = {
@@ -1290,8 +1282,8 @@
                                     {
                                         id: 'wtblitz-testing',
                                         position: 1,
-                                        title: 'WT Blitz — НОВОЕ ТЕСТИРОВАНИЕ!',
-                                        description: 'Разработчики анонсировали закрытое тестирование новой механики боя. Узнай все подробности и стань частью истории!',
+                                        title: 'WT Blitz — ОТКРЫТОЕ ТЕСТИРОВАНИЕ!',
+                                        description: 'Разработчики анонсировали открытое тестирование новой механики боя. Узнай все подробности и стань частью истории!',
                                         image: 'images/ea8df97b7f10cdf265a078f7b7bf0a73.jpg',
                                         link: 'https://t.me/WTBLITZMobile',
                                         target: '_blank',
@@ -1305,8 +1297,8 @@
                                     {
                                         id: 'new-event',
                                         position: 2,
-                                        title: '🎯 НОВОЕ СОБЫТИЕ',
-                                        description: 'Прими участие в новом игровом событии! Успей заработать уникальные награды.',
+                                        title: '⏳ ДО НОВОГО ТЕСТА ОСТАЛОСЬ',
+                                        description: 'Следи за временем! Открытое тестирование новой механики боя начнётся уже скоро.',
                                         image: 'images/ea8df97b7f10cdf265a078f7b7bf0a73.jpg',
                                         link: 'https://t.me/WTBLITZMobile',
                                         target: '_blank',
@@ -1327,8 +1319,8 @@
                                 items: [
                                     {
                                         id: 'wtblitz-testing-list',
-                                        title: 'WT Blitz — НОВОЕ ТЕСТИРОВАНИЕ!',
-                                        description: 'Закрытое тестирование новой механики боя уже скоро!',
+                                        title: 'WT Blitz — ОТКРЫТОЕ ТЕСТИРОВАНИЕ!',
+                                        description: 'Открытое тестирование новой механики боя уже скоро!',
                                         image: 'images/ea8df97b7f10cdf265a078f7b7bf0a73.jpg',
                                         link: 'https://t.me/WTBLITZMobile',
                                         category: {
@@ -1340,8 +1332,8 @@
                                     },
                                     {
                                         id: 'new-event-list',
-                                        title: '🎯 НОВОЕ СОБЫТИЕ',
-                                        description: 'Уникальные награды ждут тебя!',
+                                        title: '⏳ ДО НОВОГО ТЕСТА ОСТАЛОСЬ',
+                                        description: 'Осталось всего несколько дней!',
                                         image: 'images/ea8df97b7f10cdf265a078f7b7bf0a73.jpg',
                                         link: 'https://t.me/WTBLITZMobile',
                                         category: {
@@ -1355,7 +1347,7 @@
                             }
                         };
 
-                        // ---- АВТОРИЗАЦИЯ ----
+                        // ---- СОСТОЯНИЕ АВТОРИЗАЦИИ ----
                         var currentUser = null;
                         var USERS = {
                             'player': { password: '123456', displayName: 'Игрок' },
@@ -1363,18 +1355,19 @@
                             'test': { password: 'test', displayName: 'Тестовый' }
                         };
 
-                        // ---- ТАЙМЕР ----
+                        // ---- ФУНКЦИЯ ДЛЯ ТАЙМЕРА ----
                         function updateTimer(container, endTime) {
                             var now = new Date().getTime();
                             var timeRemaining = endTime - now;
+
                             if (timeRemaining > 0) {
                                 var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
                                 var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                                 var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
                                 container.innerHTML = '<span class="timer-days">' + days + '</span> д <span class="timer-hours">' + hours + '</span> ч <span class="timer-minutes">' + minutes + '</span> мин';
                             } else {
-                                container.innerHTML = 'Событие завершено';
-                                container.style.color = '#999';
+                                container.innerHTML = 'Тест уже начался!';
+                                container.style.color = '#33e284';
                             }
                         }
 
@@ -1389,13 +1382,18 @@
                             });
                         }
 
-                        // ---- НОВОСТИ ----
+                        // ---- РЕНДЕРИНГ НОВОСТЕЙ ----
                         function renderMainGrid(config) {
                             var container = document.getElementById('news-grid-container');
                             if (!container) return;
+
                             container.innerHTML = '';
                             container.className = 'b4r-grid b4r-grid__type-' + (config.gridType || 2);
-                            var sortedItems = config.items.slice().sort(function(a, b) { return a.position - b.position; });
+
+                            var sortedItems = config.items.slice().sort(function(a, b) {
+                                return a.position - b.position;
+                            });
+
                             for (var i = 0; i < sortedItems.length; i++) {
                                 var item = sortedItems[i];
                                 var gridItem = document.createElement('div');
@@ -1409,12 +1407,15 @@
                         function renderNewsList(config) {
                             var container = document.getElementById('news-list-container');
                             if (!container) return;
+
                             var maxItems = config.maxItems || 5;
                             var itemsToShow = config.items.slice(0, maxItems);
                             var newsItemsHTML = '';
+
                             for (var i = 0; i < itemsToShow.length; i++) {
                                 newsItemsHTML += generateNewsListItemHTML(itemsToShow[i]);
                             }
+
                             container.innerHTML = `
                                 <h2 class="news-list_heading">
                                     <span>${config.title || 'Последние записи'}</span>
@@ -1433,6 +1434,7 @@
                         function generateMainGridItemHTML(item) {
                             var categoryHTML = '';
                             var timerHTML = '';
+                            
                             if (item.category) {
                                 categoryHTML = `
                                     <div class="news-info news-b4r_news-info">
@@ -1443,6 +1445,7 @@
                                     </div>
                                 `;
                             }
+
                             if (item.showTimer && item.timerEnd) {
                                 timerHTML = `
                                     <div style="margin-top: 8px;">
@@ -1454,6 +1457,7 @@
                                     </div>
                                 `;
                             }
+
                             return `
                                 <div class="news-b4r b4r-grid_news-b4r">
                                     <div class="news-b4r_img" style="background-image: url('${item.image}');"></div>
@@ -1470,6 +1474,7 @@
 
                         function generateNewsListItemHTML(item) {
                             var timerHTML = '';
+                            
                             if (item.showTimer && item.timerEnd) {
                                 timerHTML = `
                                     <span class="timer-container" data-timer-end="${item.timerEnd}">
@@ -1479,6 +1484,7 @@
                                     </span>
                                 `;
                             }
+
                             return `
                                 <div class="news-list_item">
                                     <div class="news-annotation">
@@ -1502,14 +1508,16 @@
                             `;
                         }
 
-                        // ---- МЕНЮ ----
+                        // ---- РЕНДЕРИНГ МЕНЮ ----
                         function renderMenu() {
                             var container = document.getElementById('user-menu-container');
                             var mobileContainer = document.getElementById('mobileAuthButtons');
                             if (!container) return;
+
                             if (currentUser) {
                                 var displayName = currentUser.displayName || currentUser.login;
                                 var avatar = displayName.charAt(0).toUpperCase();
+
                                 container.innerHTML = `
                                     <div class="cm-user-menu">
                                         <a href="#" class="cm-user-menu-link">
@@ -1522,10 +1530,12 @@
                                         </button>
                                     </div>
                                 `;
+
                                 document.getElementById('logoutBtn').addEventListener('click', function(e) {
                                     e.preventDefault();
                                     logout();
                                 });
+
                                 if (mobileContainer) {
                                     mobileContainer.innerHTML = `
                                         <div style="display:flex; align-items:center; gap:10px; padding:10px 0; color:#ced6d5;">
@@ -1539,6 +1549,7 @@
                                         logout();
                                     });
                                 }
+
                             } else {
                                 container.innerHTML = `
                                     <div class="cm-user-menu">
@@ -1546,14 +1557,17 @@
                                         <button class="cm-register-btn" id="showRegisterBtn">Регистрация</button>
                                     </div>
                                 `;
+
                                 document.getElementById('showLoginBtn').addEventListener('click', function(e) {
                                     e.preventDefault();
                                     showLoginModal('login');
                                 });
+
                                 document.getElementById('showRegisterBtn').addEventListener('click', function(e) {
                                     e.preventDefault();
                                     showLoginModal('register');
                                 });
+
                                 if (mobileContainer) {
                                     mobileContainer.innerHTML = `
                                         <div style="display:flex; flex-direction:column; gap:8px; width:100%; padding:10px 0;">
@@ -1582,7 +1596,9 @@
                             var error = document.getElementById('authError');
                             var emailField = document.getElementById('loginEmail');
                             var passwordField = document.getElementById('loginPassword');
+
                             error.classList.remove('active');
+
                             if (mode === 'register') {
                                 title.textContent = 'Регистрация';
                                 subtitle.textContent = 'Создайте новый аккаунт';
@@ -1598,19 +1614,24 @@
                                 emailField.placeholder = 'Введите логин';
                                 passwordField.placeholder = 'Введите пароль';
                             }
+
                             modal.classList.add('active');
                             document.body.style.overflow = 'hidden';
+
                             setTimeout(function() {
                                 var loginBtn = document.getElementById('authLoginBtn');
                                 var newLoginBtn = loginBtn.cloneNode(true);
                                 loginBtn.parentNode.replaceChild(newLoginBtn, loginBtn);
+
                                 newLoginBtn.addEventListener('click', function() {
                                     handleAuth(mode);
                                 });
+
                                 var registerLinkEl = document.querySelector('.auth-modal_register a');
                                 if (registerLinkEl) {
                                     var newLink = registerLinkEl.cloneNode(true);
                                     registerLinkEl.parentNode.replaceChild(newLink, registerLinkEl);
+
                                     newLink.addEventListener('click', function(e) {
                                         e.preventDefault();
                                         var newMode = mode === 'login' ? 'register' : 'login';
@@ -1627,30 +1648,36 @@
                             document.getElementById('authError').classList.remove('active');
                         }
 
+                        // ---- ОБРАБОТКА АВТОРИЗАЦИИ ----
                         function handleAuth(mode) {
                             var email = document.getElementById('loginEmail').value.trim();
                             var password = document.getElementById('loginPassword').value.trim();
                             var error = document.getElementById('authError');
+
                             if (!email || !password) {
                                 error.textContent = 'Заполните все поля';
                                 error.classList.add('active');
                                 return;
                             }
+
                             if (mode === 'register') {
                                 if (USERS[email]) {
                                     error.textContent = 'Пользователь с таким логином уже существует';
                                     error.classList.add('active');
                                     return;
                                 }
+
                                 USERS[email] = {
                                     password: password,
                                     displayName: email.charAt(0).toUpperCase() + email.slice(1)
                                 };
+
                                 currentUser = { login: email, displayName: USERS[email].displayName };
                                 closeModal();
                                 renderMenu();
                                 return;
                             }
+
                             var user = USERS[email];
                             if (user && user.password === password) {
                                 currentUser = { login: email, displayName: user.displayName };
@@ -1662,6 +1689,7 @@
                             }
                         }
 
+                        // ---- ВЫХОД ----
                         function logout() {
                             currentUser = null;
                             renderMenu();
@@ -1704,6 +1732,7 @@
                                 toggleMobileMenu();
                             });
                         }
+
                         if (cmSwitch) {
                             cmSwitch.addEventListener('click', function(e) {
                                 e.preventDefault();
@@ -1711,6 +1740,7 @@
                                 toggleMobileMenu();
                             });
                         }
+
                         document.addEventListener('click', function(e) {
                             if (isMobileOpen && !mobileNav.contains(e.target) && !burgerBtn.contains(e.target)) {
                                 closeMobileMenu();
@@ -1723,10 +1753,12 @@
                             renderNewsList(newsConfig.newsList);
                             renderMenu();
                             initTimers();
+
                             document.getElementById('authModalClose').addEventListener('click', closeModal);
                             document.getElementById('authModal').addEventListener('click', function(e) {
                                 if (e.target === this) closeModal();
                             });
+
                             document.addEventListener('keydown', function(e) {
                                 if (e.key === 'Enter') {
                                     var modal = document.getElementById('authModal');
@@ -1737,7 +1769,8 @@
                                     }
                                 }
                             });
-                            console.log('✅ WT Blitz: 2 новости + таймер + авторизация + бургер-меню (Помоги нам! скрыта)');
+
+                            console.log('✅ WT Blitz: 2 новости + таймер + авторизация + бургер-меню');
                         }
 
                         if (document.readyState === 'loading') {
@@ -1745,10 +1778,12 @@
                         } else {
                             init();
                         }
+
                         window.loadNewsFromGitHub = function() {
                             console.log('🔄 Загрузка с GitHub отключена');
                             init();
                         };
+
                     })();
                 </script>
 </body>
