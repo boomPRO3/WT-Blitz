@@ -1,14 +1,376 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>Альфа тест номер 2 | Blitz</title>
+    <title>Альфа тест номер 2 | WT Blitz</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700|Roboto:400,700&subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wh1to/blitz-web@main/css/app.b9n9g9c.css">
+    <style>
+        body, .page, .page_body {
+            background: #121a22 !important;
+            min-height: 100%;
+        }
+        .page_body {
+            background: #121a22 !important;
+            background-image: none !important;
+        }
+        .news_content {
+            color: #ced6d5;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        .news_content h2 {
+            color: #f2942b;
+            font-size: 26px;
+            margin: 30px 0 16px;
+            border-bottom: 1px solid rgba(242, 148, 43, 0.2);
+            padding-bottom: 8px;
+        }
+        .news_content h3 {
+            color: #e1630e;
+            font-size: 20px;
+            margin: 24px 0 12px;
+        }
+        .news_content ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0 20px;
+        }
+        .news_content ul li {
+            background: rgba(49, 125, 167, 0.15);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            border: 1px solid rgba(49, 125, 167, 0.2);
+            color: #b0cad9;
+        }
+        .news_content ul li strong {
+            color: #ced6d5;
+        }
+        .tank-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin: 16px 0 24px;
+        }
+        .tank-grid .tank-item {
+            background: rgba(32, 39, 47, 0.8);
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            color: #9fa7a8;
+            border: 1px solid #2a3a48;
+            transition: all 0.3s;
+        }
+        .tank-grid .tank-item:hover {
+            border-color: #f2942b;
+            color: #fff;
+            background: rgba(242, 148, 43, 0.1);
+        }
+        .tank-grid .tank-item .flag {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        .tank-grid .tank-item .level {
+            display: block;
+            font-size: 11px;
+            color: #838b8d;
+            margin-top: 2px;
+        }
+        .container-box {
+            background: rgba(32, 39, 47, 0.6);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+            border-left: 4px solid #e1630e;
+        }
+        .container-box h3 {
+            margin-top: 0;
+            color: #f2942b;
+        }
+        .container-box p {
+            margin: 8px 0;
+        }
+        .timer-box {
+            background: rgba(242, 148, 43, 0.08);
+            border: 1px solid rgba(242, 148, 43, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin: 30px 0 20px;
+        }
+        .timer-box .timer-container {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f2942b;
+        }
+        .timer-box .timer-container .timer-days,
+        .timer-box .timer-container .timer-hours,
+        .timer-box .timer-container .timer-minutes {
+            background: rgba(242, 148, 43, 0.15);
+            padding: 4px 16px;
+            border-radius: 8px;
+            min-width: 50px;
+            display: inline-block;
+        }
+        .btn-main {
+            display: inline-block;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 14px 40px;
+            border-radius: 4px;
+            background-color: #e1630e;
+            color: #fff;
+            font-weight: 500;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            transition: background-color 0.2s;
+            margin-top: 12px;
+        }
+        .btn-main:hover {
+            background-color: #e69740;
+        }
+        .icon-container {
+            text-align: center;
+            margin: 16px 0 8px;
+        }
+        .icon-container img {
+            max-width: 120px;
+            border-radius: 12px;
+            border: 2px solid rgba(242, 148, 43, 0.2);
+            padding: 8px;
+            background: rgba(32, 39, 47, 0.5);
+        }
+        .logo-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .logo-footer img {
+            max-width: 60px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .logo-footer img:hover {
+            opacity: 1;
+        }
+        .logo-footer p {
+            font-size: 12px;
+            color: #5a5f62;
+            margin-top: 8px;
+        }
+
+        /* ===== НАВИГАЦИЯ ===== */
+        .navigation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding-top: 55px;
+            background: #0b1117;
+            box-sizing: border-box;
+            overflow: hidden;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-100%);
+            z-index: 100;
+            transition: opacity 0.35s ease-in-out, visibility 0s linear 1s, transform 0.35s ease-in-out;
+            list-style: none;
+            margin: 0;
+            padding-left: 0;
+            width: 100%;
+            height: 100vh;
+        }
+        .navigation__show {
+            opacity: 1;
+            transition-delay: 0s;
+            visibility: visible;
+            transform: translateX(0);
+        }
+        .navigation_item {
+            margin: 0;
+        }
+        .navigation_link {
+            color: #ced6d5;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 0.75px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            padding: 20px 0;
+            margin: 0 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            white-space: nowrap;
+        }
+        .navigation_item__help {
+            display: none !important;
+        }
+        .navigation-switch {
+            position: relative;
+            flex-shrink: 0;
+            margin-left: 15px;
+            border: 1px solid #869094;
+            box-sizing: border-box;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-family: Roboto, Arial, Helvetica CY, Helvetica, sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 1.2px;
+            color: #869094;
+            padding: 5px 12px 4px;
+            background: transparent;
+            transition: background-image 0.35s ease-out, color 0.35s ease-out, border-color 0.35s ease-out;
+            cursor: pointer;
+            z-index: 101;
+        }
+        .navigation-switch__close {
+            color: transparent;
+            border-color: transparent;
+        }
+        .navigation-switch:before {
+            position: absolute;
+            content: "";
+            right: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>') no-repeat 100% 50%;
+            background-size: contain;
+            opacity: 0;
+            transition: opacity 0.35s ease-in-out;
+        }
+        .navigation-switch__close:before {
+            opacity: 1;
+        }
+        .button-play {
+            padding: 0 20px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            height: 35px;
+            background-color: #e1630e;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease-out;
+        }
+        .button-play:hover {
+            background-color: #e69740;
+        }
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translateY(0);
+            width: 100%;
+            z-index: 10;
+            height: 55px;
+            transition: background 0.35s linear, height 0s linear 1s, transform 0.35s ease-in-out;
+        }
+        .nav-bar_content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 55px;
+            max-width: 1290px;
+            box-sizing: border-box;
+            margin: 0 auto;
+            padding: 0 14px;
+            background: rgba(11, 17, 23, 0.9);
+        }
+        .nav-bar_item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            width: 100%;
+        }
+        .portal-logo {
+            display: block;
+            width: 23px;
+            height: 28px;
+            background: url('../../images/ac335cc3aede68105eae6a6142e7f438.png') 50% 50% no-repeat;
+            background-size: contain;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+        .cm-switch {
+            width: 20px;
+            height: 20px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>') no-repeat 50% 50%;
+            background-size: contain;
+            margin-left: 15px;
+            transition: background-image 0.2s ease-out;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+        .cm-switch__close {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>') !important;
+        }
+
+        @media (max-width: 768px) {
+            .tank-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+            .timer-box .timer-container {
+                font-size: 20px;
+            }
+            .navigation_link {
+                font-size: 16px;
+                padding: 16px 0;
+                margin: 0 16px;
+            }
+            .icon-container img {
+                max-width: 80px;
+            }
+        }
+    </style>
 </head>
 <body class="page">
     <div class="page_body" id="app">
+        <!-- ===== НАВИГАЦИЯ ===== -->
+        <nav class="nav-bar">
+            <div class="nav-bar_content">
+                <a href="../../index.html" class="portal-logo nav-bar_portal-logo"></a>
+
+                <button class="navigation-switch" id="burgerBtn">
+                    <span class="navigation-switch_text"><span>Меню</span></span>
+                </button>
+
+                <ul class="navigation" id="mobileNav">
+                    <li class="navigation_item"><a href="../../index.html" class="navigation_link"><span>Главная</span></a></li>
+                    <li class="navigation_item"><a href="../../pages/forbidden_ru.html" class="navigation_link"><span>Лента</span></a></li>
+                    <li class="navigation_item"><a href="../../pages/forbidden_ru.html" class="navigation_link"><span>Турниры</span></a></li>
+                    <li class="navigation_item navigation_item__help"><a href="../../pages/news/archive_content.html" target="_blank" class="navigation_link"><span>Помоги нам!</span></a></li>
+                    <li class="navigation_item"><a class="button-play navigation_button-play"><span>ИГРАТЬ</span></a></li>
+                </ul>
+
+                <div class="nav-bar_item">
+                    <a class="button-play nav-bar_button-play" href="https://t.me/projectwotblitz"><span>МЫ В TELEGRAM</span></a>
+                    <button class="cm-switch nav-bar_cm-switch" id="cmSwitchBtn"></button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
         <main class="news-page">
             <div>
                 <div class="news-page_item">
@@ -16,8 +378,8 @@
                         <div class="news_body">
                             <!-- Хлебные крошки -->
                             <div class="bread-crumbs">
-                                <a href="#" class="bread-crumbs_link"><span>Главная</span></a>
-                                <a href="#" class="bread-crumbs_link"><span>Лента</span></a>
+                                <a href="../../index.html" class="bread-crumbs_link"><span>Главная</span></a>
+                                <a href="../../pages/forbidden_ru.html" class="bread-crumbs_link"><span>Лента</span></a>
                                 <a href="#" class="bread-crumbs_link">Альфа тест номер 2</a>
                             </div>
 
@@ -31,30 +393,73 @@
 
                             <!-- Баннер -->
                             <div class="news_banner">
-                                <img src="images/4005838874.jpg" alt="Альфа тест номер 2" style="width: 100%; max-width: 800px; border-radius: 8px;">
+                                <img src="../../images/4005838874.jpg" alt="Альфа тест номер 2" style="width: 100%; max-width: 800px; border-radius: 8px;">
                             </div>
 
-                            <!-- Контент -->
+                            <!-- ===== КОНТЕНТ ===== -->
                             <div class="news_content">
                                 <div>
                                     <div>
-                                        <blockquote class="message-block">
-                                            🚀 Новые контейнеры, новые танки, новые функции и обновлённый интерфейс!
+                                        <!-- ИКОНКА КОНТЕЙНЕРА -->
+                                        <div class="icon-container">
+                                            <img src="../../images/1534138736.jpg" alt="Контейнер Супернова" title="Контейнер Супернова">
+                                            <p style="color: #838b8d; font-size: 13px; margin-top: 4px;">⭐ Контейнер «Супернова»</p>
+                                        </div>
+
+                                        <blockquote class="message-block" style="border-left-color: #e1630e;">
+                                            🚀 <strong>Новые контейнеры — «Супернова» и «Чёрный ящик». А также новые танки в обновлении!</strong>
                                         </blockquote>
 
-                                        <p><strong>Альфа тест номер 2</strong> — это следующий шаг к совершенству! Мы подготовили для тебя множество новинок:</p>
+                                        <!-- ===== КОНТЕЙНЕРЫ ===== -->
+                                        <h2>📦 Новые контейнеры</h2>
 
-                                        <ul>
-                                            <li><strong>Новые контейнеры</strong> — эксклюзивные награды ждут тебя внутри!</li>
-                                            <li><strong>Новые танки</strong> — мощная техника, которая изменит правила игры!</li>
-                                            <li><strong>Новые функции</strong> — улучшенная механика боя и дополнительные возможности!</li>
-                                            <li><strong>Обновлённый интерфейс</strong> — более удобный и интуитивно понятный дизайн!</li>
-                                        </ul>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0;">
+                                            <div style="background: rgba(32, 39, 47, 0.6); padding: 20px; border-radius: 12px; border: 1px solid rgba(242, 148, 43, 0.2); text-align: center;">
+                                                <span style="font-size: 40px; display: block;">⭐</span>
+                                                <strong style="color: #f2942b; font-size: 18px;">Супернова</strong>
+                                                <p style="color: #9fa7a8; font-size: 14px; margin-top: 4px;">Редкие награды и топ-танки</p>
+                                            </div>
+                                            <div style="background: rgba(32, 39, 47, 0.6); padding: 20px; border-radius: 12px; border: 1px solid rgba(100, 100, 100, 0.3); text-align: center;">
+                                                <span style="font-size: 40px; display: block;">⬛</span>
+                                                <strong style="color: #ced6d5; font-size: 18px;">Чёрный ящик</strong>
+                                                <p style="color: #9fa7a8; font-size: 14px; margin-top: 4px;">Секретные награды и сюрпризы</p>
+                                            </div>
+                                        </div>
 
-                                        <p>Не пропусти возможность стать частью истории! Участвуй в тестировании и получи уникальные награды!</p>
+                                        <!-- ===== ТАНКИ ===== -->
+                                        <h2>🎯 Новые танки в обновлении</h2>
 
-                                        <!-- Таймер -->
-                                        <div style="margin-top: 30px; padding: 20px; background: rgba(242, 148, 43, 0.1); border-radius: 8px; text-align: center;">
+                                        <p style="color: #9fa7a8;">В альфа-тесте появятся следующие машины:</p>
+
+                                        <div class="tank-grid">
+                                            <div class="tank-item"><span class="flag">🇩🇪</span>Штурмтигр<span class="level">X уровень</span></div>
+                                            <div class="tank-item"><span class="flag">🇷🇺</span>Объект 283<span class="level">IX уровень</span></div>
+                                            <div class="tank-item"><span class="flag">🇫🇷</span>МС-11<span class="level">VIII уровень</span></div>
+                                            <div class="tank-item"><span class="flag">🇩🇪</span>Диамант К-91-122<span class="level">X уровень</span></div>
+                                            <div class="tank-item"><span class="flag">🇫🇷</span>Лион<span class="level">VIII уровень</span></div>
+                                            <div class="tank-item"><span class="flag">🇩🇪</span>Пантера М/10<span class="level">VII уровень</span></div>
+                                            <div class="tank-item"><span class="flag">🇷🇺</span>Объект 140<span class="level">X уровень</span></div>
+                                            <div class="tank-item"><span class="flag">🇺🇸</span>Ровер<span class="level">IX уровень</span></div>
+                                            <div class="tank-item"><span class="flag">🇩🇪</span>Штуг Маус<span class="level">IX уровень</span></div>
+                                            <div class="tank-item"><span class="flag">🇮🇹</span>Карро 45 т<span class="level">X уровень</span></div>
+                                        </div>
+
+                                        <div class="container-box">
+                                            <h3>⚡ Особенности новых танков</h3>
+                                            <p>🔹 <strong>Штурмтигр</strong> — бронированный монстр с мощной 380-мм пушкой и отличной защитой.</p>
+                                            <p>🔹 <strong>Объект 283</strong> — мобильный средний танк с отличной динамикой и точным орудием.</p>
+                                            <p>🔹 <strong>МС-11</strong> — лёгкий танк с уникальной оптикой и высокой скоростью.</p>
+                                            <p>🔹 <strong>Диамант К-91-122</strong> — тяжёлый танк с усиленной башней и мощным орудием.</p>
+                                            <p>🔹 <strong>Лион</strong> — французский красавчик с барабаном на 4 снаряда и отличной динамикой.</p>
+                                            <p>🔹 <strong>Пантера М/10</strong> — классический средний танк с улучшенной динамикой.</p>
+                                            <p>🔹 <strong>Объект 140</strong> — легендарный средний танк с улучшенной точкой и броней.</p>
+                                            <p>🔹 <strong>Ровер</strong> — быстрый и бронированный лёгкий танк с хорошим орудием.</p>
+                                            <p>🔹 <strong>Штуг Маус</strong> — невероятный гибрид Maus и StuG с мощным орудием.</p>
+                                            <p>🔹 <strong>Карро 45 т</strong> — итальянский тяжёлый танк с уникальной механикой и барабаном.</p>
+                                        </div>
+
+                                        <!-- ===== ТАЙМЕР ===== -->
+                                        <div class="timer-box">
                                             <span style="font-size: 18px; font-weight: 700; color: #ced6d5;">⏳ До начала теста осталось:</span>
                                             <div style="margin-top: 10px;">
                                                 <span class="timer-container" data-timer-end="2026-08-27T18:00:00">
@@ -63,12 +468,22 @@
                                                     <span class="timer-minutes">0</span> мин
                                                 </span>
                                             </div>
+                                            <p style="font-size: 14px; color: #838b8d; margin-top: 12px;">27 августа 2026, 18:00 (по МСК)</p>
                                         </div>
 
-                                        <div style="margin-top: 20px;">
-                                            <a href="https://t.me/WTBLITZMobile" target="_blank" class="button-cta" style="display: inline-block; text-decoration: none; font-size: 14px; padding: 12px 32px; border-radius: 4px; background-color: #e1630e; color: #fff; font-weight: 500; letter-spacing: 1.4px; text-transform: uppercase;">
+                                        <!-- ===== КНОПКА ===== -->
+                                        <div style="text-align: center; margin: 20px 0;">
+                                            <a href="https://t.me/WTBLITZMobile" target="_blank" class="btn-main">
                                                 🎮 Участвовать в тесте
                                             </a>
+                                        </div>
+
+                                        <!-- ===== ЛОГОТИП В КОНЦЕ ===== -->
+                                        <div class="logo-footer">
+                                            <a href="../../index.html">
+                                                <img src="../../images/ac335cc3aede68105eae6a6142e7f438.png" alt="WT Blitz">
+                                            </a>
+                                            <p>2026 by BOOMSTIDIO &amp; nitrohunder</p>
                                         </div>
                                     </div>
                                 </div>
@@ -78,35 +493,82 @@
                 </div>
             </div>
         </main>
-    </div>
 
-    <!-- ===== СКРИПТ ТАЙМЕРА ===== -->
-    <script>
-        (function() {
-            function updateTimer(container, endTime) {
-                var now = new Date().getTime();
-                var timeRemaining = endTime - now;
+        <!-- ===== СКРИПТ ТАЙМЕРА ===== -->
+        <script>
+            (function() {
+                function updateTimer(container, endTime) {
+                    var now = new Date().getTime();
+                    var timeRemaining = endTime - now;
 
-                if (timeRemaining > 0) {
-                    var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                    var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-                    container.innerHTML = '<span class="timer-days">' + days + '</span> д <span class="timer-hours">' + hours + '</span> ч <span class="timer-minutes">' + minutes + '</span> мин';
-                } else {
-                    container.innerHTML = 'Тест уже начался!';
-                    container.style.color = '#33e284';
+                    if (timeRemaining > 0) {
+                        var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                        var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                        container.innerHTML = '<span class="timer-days">' + days + '</span> д <span class="timer-hours">' + hours + '</span> ч <span class="timer-minutes">' + minutes + '</span> мин';
+                    } else {
+                        container.innerHTML = 'Тест уже начался!';
+                        container.style.color = '#33e284';
+                    }
                 }
-            }
 
-            var containers = document.querySelectorAll('.timer-container[data-timer-end]');
-            containers.forEach(function(container) {
-                var endTime = new Date(container.getAttribute('data-timer-end')).getTime();
-                updateTimer(container, endTime);
-                setInterval(function() {
+                var containers = document.querySelectorAll('.timer-container[data-timer-end]');
+                containers.forEach(function(container) {
+                    var endTime = new Date(container.getAttribute('data-timer-end')).getTime();
                     updateTimer(container, endTime);
-                }, 60000);
-            });
-        })();
-    </script>
+                    setInterval(function() {
+                        updateTimer(container, endTime);
+                    }, 60000);
+                });
+            })();
+        </script>
+
+        <!-- ===== СКРИПТ БУРГЕР-МЕНЮ ===== -->
+        <script>
+            (function() {
+                var burgerBtn = document.getElementById('burgerBtn');
+                var mobileNav = document.getElementById('mobileNav');
+                var cmSwitch = document.getElementById('cmSwitchBtn');
+                var isOpen = false;
+
+                function toggleMenu() {
+                    isOpen = !isOpen;
+                    if (isOpen) {
+                        mobileNav.classList.add('navigation__show');
+                        burgerBtn.classList.add('navigation-switch__close');
+                        if (cmSwitch) cmSwitch.classList.add('cm-switch__close');
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        mobileNav.classList.remove('navigation__show');
+                        burgerBtn.classList.remove('navigation-switch__close');
+                        if (cmSwitch) cmSwitch.classList.remove('cm-switch__close');
+                        document.body.style.overflow = '';
+                    }
+                }
+
+                if (burgerBtn) {
+                    burgerBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleMenu();
+                    });
+                }
+
+                if (cmSwitch) {
+                    cmSwitch.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleMenu();
+                    });
+                }
+
+                document.addEventListener('click', function(e) {
+                    if (isOpen && !mobileNav.contains(e.target) && !burgerBtn.contains(e.target)) {
+                        toggleMenu();
+                    }
+                });
+            })();
+        </script>
+    </div>
 </body>
 </html>
